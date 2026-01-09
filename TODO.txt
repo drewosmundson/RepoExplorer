@@ -1,0 +1,63 @@
+An application that parses the folder structure of a project extracts all the classes and methods within them and how they interact with each other. A more involved automatic UML diagram is generated from the current state of the project. The intended users of this program are those exploring open source projects and are curious about the system design.
+
+
+
+
+
+DATA PIPELINE
+==============================
+1. Ingest repo
+  With GitHub API
+  Given a GitHub URL
+    exclude
+      node_modules
+      dist, build
+      test folders
+    Detect language(s)
+    Gate input size, or this will lead to DDoS
+
+2. Analyze structure
+    With TypeScript compiler API
+    (this already parses the Javascript and knows JS classes and functions)
+
+3. Extract relationships
+  Classes
+    Name
+    Methods
+    Fields
+    Visibility (public/private/protected)
+    Static vs instance
+  Relationships
+    Inheritance (extends)
+    Interface implementation
+    Composition (field of another class)
+    Aggregation (constructor param types)
+    Dependency (method param / return types)
+  Functions outside classes
+    group into a module
+
+
+4. internal data structure
+  type UMLClass = {
+    name: string
+    methods: UMLMethod[]
+    fields: UMLField[]
+    extends?: string
+    implements?: string[]
+  }
+
+  type UMLDiagram = {
+    classes: UMLClass[]
+    relations: UMLRelation[]
+  }
+
+5. Build a language-agnostic model
+  Render UML
+    options: Graphviz (DOT), Dagre, or ELK
+    UML model -> graph -> layout engine -> positioned nodes
+  
+6. Export to PDF
+  SVG first
+  Render UML as SVG in browser
+  Export SVG -> PDF
+
