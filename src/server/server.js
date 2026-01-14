@@ -6,6 +6,9 @@ import http from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+// Load environment variables
+dotenv.config();
+
 // ---- process-level safety net ----
 process.on('uncaughtException', (err) => {
   console.error('UNCAUGHT EXCEPTION');

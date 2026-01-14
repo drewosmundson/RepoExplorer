@@ -1,7 +1,7 @@
 
 // This function validates that this repo is able to be operated on by this application
 // The repository must be public and not too large
-export async function repoValidation(input){
+export async function repoUrlValidation(input){
   if(!hasValueInField(input)){
     sendAlert("Enter A Valid URL");
     return false;
@@ -18,11 +18,6 @@ export async function repoValidation(input){
   const repoVisibilityStatus = await getRepoVisibilityStatus(input);
   if(repoVisibilityStatus !== "Public") { // bug fixed: != comparison always returned true because a promise compared to a string is false
     sendAlert(repoVisibilityStatus);
-    return false;
-  }
-  
-  if(!checkRepoSize(input)){
-    sendAlert("Repository too large to process");
     return false;
   }
   return true;
@@ -70,12 +65,6 @@ async function getRepoVisibilityStatus(input) {
     return "Network error occurred";
   }
 }
-
-// TODO Implement function
-function checkRepoSize(input){ 
-  return true;
-}
-
 
 function sendAlert(reason){
   alert(reason);
