@@ -1,7 +1,23 @@
+export async function repoValidation(url, user){
+
+    // Check that the user has not recently submitted another request for ddos prevention.
+    if (!userAuth(user)) return false;
+
+    // Check if the url is a github repo and public
+    if (!(await repoUrlValidation(url))) return false;
+    // parse repo URL for user and repo name for git api
+    const { owner, repo } = parseGitHubUrl(url);
+
+
+    // check if the github repo is a vaild size to scan
+    if (!(await repoSizeValidation(owner, repo))) return false;
+    return true;
+  }
+
 
 // This function validates that this repo is able to be operated on by this application
 // The repository must be public and not too large
-export async function repoUrlValidation(input){
+async function repoUrlValidation(input){
   if(!hasValueInField(input)){
     sendAlert("Enter A Valid URL");
     return false;
@@ -50,6 +66,7 @@ function isGitHubRepo(input) {
   return githubRepoRegex.test(input);
 }
 
+
 async function getRepoVisibilityStatus(input) {
   try {
       const response = await fetch(input);
@@ -66,7 +83,25 @@ async function getRepoVisibilityStatus(input) {
   }
 }
 
+
 function sendAlert(reason){
   alert(reason);
   console.log(reason);
 }
+
+
+
+
+// -----------------------------------------------------------------
+
+
+// The purpose of this function is to ensure that the server can reasonablly process. It is basic security against DDOS or misuse
+// It checks that the repo is not too large too deep or too many files
+
+function repoSizeValidation() {
+
+
+
+}
+
+
